@@ -25,6 +25,8 @@ public class Main {
                 System.out.println("7. Update Student");
                 System.out.println("8. Delete Student");
                 System.out.println("9. Exit");
+                System.out.println("10. Sort Student");
+                System.out.println("11. Student Statistics");
 
                 System.out.print("\nEnter your choice: ");
 
@@ -255,6 +257,86 @@ public class Main {
                     System.out.println("       Goodbye!");
                     System.out.println("=================================");
                     break;
+                }
+                // =========================
+                // 7. SORT
+                // =========================
+                else if (choice == 10) {
+                    System.out.println("1. Sort By Name");
+                    System.out.println("2. Sort By Age");
+                    System.out.println("3. Sort By Marks");
+                    System.out.print("Enter Your Choice: ");
+                    int choicee = sc.nextInt();
+                    sc.nextLine();
+                    if (choicee == 1) {
+                        String query = "SELECT * FROM students  ORDER BY name ASC";
+                        PreparedStatement preparedStatement = connection.prepareStatement(query);
+                        ResultSet resultSet = preparedStatement.executeQuery();
+                        while (resultSet.next()) {
+                            System.out.println("-------------------------");
+                            System.out.println("ID     : " + resultSet.getInt("id"));
+                            System.out.println("Name   : " + resultSet.getString("name"));
+                            System.out.println("Course : " + resultSet.getString("course"));
+                            System.out.println("Marks  : " + resultSet.getDouble("marks"));
+                            System.out.println("Age    : " + resultSet.getInt("age"));
+                            System.out.println("Gender : " + resultSet.getString("gender"));
+                        }
+                        resultSet.close();
+                        preparedStatement.close();
+                    }
+                    else if (choicee == 2) {
+                        String query = "SELECT * FROM students ORDER BY age ASC";
+                        PreparedStatement preparedStatement = connection.prepareStatement(query);
+                        ResultSet resultSet = preparedStatement.executeQuery();
+                        while (resultSet.next()) {
+                            System.out.println("-------------------------");
+                            System.out.println("ID     : " + resultSet.getInt("id"));
+                            System.out.println("Name   : " + resultSet.getString("name"));
+                            System.out.println("Course : " + resultSet.getString("course"));
+                            System.out.println("Marks  : " + resultSet.getDouble("marks"));
+                            System.out.println("Age    : " + resultSet.getInt("age"));
+                            System.out.println("Gender : " + resultSet.getString("gender"));
+                        }
+                        resultSet.close();
+                        preparedStatement.close();
+                    }
+                    else if (choicee == 3) {
+                        String query = "SELECT * FROM students ORDER BY marks ASC";
+                        PreparedStatement preparedStatement = connection.prepareStatement(query);
+                        ResultSet resultSet = preparedStatement.executeQuery();
+                        while (resultSet.next()) {
+                            System.out.println("-------------------------");
+                            System.out.println("ID     : " + resultSet.getInt("id"));
+                            System.out.println("Name   : " + resultSet.getString("name"));
+                            System.out.println("Course : " + resultSet.getString("course"));
+                            System.out.println("Marks  : " + resultSet.getDouble("marks"));
+                            System.out.println("Age    : " + resultSet.getInt("age"));
+                            System.out.println("Gender : " + resultSet.getString("gender"));
+                        }
+                        resultSet.close();
+                        preparedStatement.close();
+                    }
+                    else {
+                        System.out.println("Invalid Choice!!");
+                    }
+                }
+                // =========================
+                // 11. Student Statistics
+                // =========================
+                else if (choice == 11) {
+                    String query = "SELECT COUNT(*) as total, AVG(marks) AS average, MAX(marks) AS highest, MIN(marks) AS lowest FROM students";
+                    PreparedStatement preparedStatement = connection.prepareStatement(query);
+                    ResultSet rs = preparedStatement.executeQuery();
+                    if (rs.next()) {
+                        System.out.println("-------------- Student Statistics -----\n");
+                        System.out.println("Total Student: " + rs.getInt("total"));
+                        System.out.println("Average Marks: " + rs.getDouble("average"));
+                        System.out.println("Highest Marks: " + rs.getDouble("highest"));
+                        System.out.println("Lowest Marks: " + rs.getDouble("lowest"));
+
+                    }
+                    rs.close();
+                    preparedStatement.close();
                 }
                 // =========================
                 // INVALID CHOICE
