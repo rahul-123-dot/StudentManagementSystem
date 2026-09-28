@@ -4,7 +4,7 @@ public class Main {
     public static void main(String[] args) {
         String url = "jdbc:mysql://localhost:3306/student_management";
         String username = "root";
-        String password = "#deadman!!";
+        String password = "??";
         Scanner sc = new Scanner(System.in);
         try {
             // Load MySQL Driver
@@ -42,30 +42,43 @@ public class Main {
                 // 1. ADD STUDENT
                 // =========================
                 if (choice == 1) {
-                    System.out.print("Enter Student Name: ");
-                    String name = sc.nextLine();
-                    System.out.print("Enter Student Course: ");
-                    String course = sc.nextLine();
-                    System.out.print("Enter Student Marks: ");
-                    double marks = sc.nextDouble();
+                    System.out.print("How Many Student You Want To Enter: ");
+                    int n = sc.nextInt();
                     sc.nextLine();
-                    System.out.print("Enter Student Age: ");
-                    int age = sc.nextInt();
-                    sc.nextLine();
-                    System.out.print("Enter Student Gender (Male, Female, Other): ");
-                    String gender = sc.nextLine();
                     String query = "INSERT INTO students(name, course, marks, age, gender) VALUES (?, ?, ?, ?, ?)";
-                    PreparedStatement preparedStatement = connection.prepareStatement(query);
-                    preparedStatement.setString(1, name);
-                    preparedStatement.setString(2, course);
-                    preparedStatement.setDouble(3, marks);
-                    preparedStatement.setDouble(4, age);
-                    preparedStatement.setString(5, gender);
-                    int rowAffected = preparedStatement.executeUpdate();
-                    if (rowAffected > 0)
-                        System.out.println("\nStudent added successfully!");
-                    else System.out.println("\nStudent not added.");
-                    preparedStatement.close();
+                    // Using try-with-resources ensures the PreparedStatement is automatically closed
+                    try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+                        for (int i = 1; i <= n; i++) {
+                            System.out.println("\n--- Entering Details for Student " + i + " ---");
+                            System.out.print("Enter Student Name: ");
+                            String name = sc.nextLine();
+                            System.out.print("Enter Student Course: ");
+                            String course = sc.nextLine();
+                            System.out.print("Enter Student Marks: ");
+                            double marks = sc.nextDouble();
+                            System.out.print("Enter Student Age: ");
+                            int age = sc.nextInt();
+                            sc.nextLine(); // consume leftover newline
+                            System.out.print("Enter Student Gender (Male, Female, Other): ");
+                            String gender = sc.nextLine();
+                            // Bind values to placeholders
+                            preparedStatement.setString(1, name);
+                            preparedStatement.setString(2, course);
+                            preparedStatement.setDouble(3, marks);
+                            preparedStatement.setInt(4, age); // Fixed: setInt instead of setDouble
+                            preparedStatement.setString(5, gender);
+                            // Add the parameters to the batch execution
+                            preparedStatement.addBatch(); // Fixed: No argument inside addBatch()
+                        }
+                        // Execute all batched inserts at once
+                        int[] arr = preparedStatement.executeBatch();
+                        System.out.println();
+                        for (int i = 0; i < arr.length; i++) {
+                            if (arr[i] > 0 || arr[i] == PreparedStatement.SUCCESS_NO_INFO) {
+                                System.out.println("Student " + (i + 1) + " inserted successfully!");
+                            }
+                        }
+                    }
                 }
                 // =========================
                 // 2. VIEW ALL STUDENTS
@@ -335,6 +348,7 @@ public class Main {
                         System.out.println("Lowest Marks: " + rs.getDouble("lowest"));
 
                     }
+                    else System.out.println("Data Not Found!");
                     rs.close();
                     preparedStatement.close();
                 }
