@@ -43,6 +43,11 @@ public class Main {
                 // =========================
                 if (choice == 1) {
                     System.out.print("How Many Student You Want To Enter: ");
+                    if (!sc.hasNextInt()) {
+                        System.out.println("Invalid!!");
+                        sc.nextLine();
+                        continue;
+                    }
                     int n = sc.nextInt();
                     sc.nextLine();
                     String query = "INSERT INTO students(name, course, marks, age, gender) VALUES (?, ?, ?, ?, ?)";
@@ -57,8 +62,12 @@ public class Main {
                             System.out.print("Enter Student Marks: ");
                             double marks = sc.nextDouble();
                             System.out.print("Enter Student Age: ");
+                            if (!sc.hasNextInt()) {
+                                System.out.println("Invalid Age");
+                                sc.nextLine();
+                            }
                             int age = sc.nextInt();
-                            sc.nextLine(); // consume leftover newline
+                            sc.nextLine();// consume leftover newline
                             System.out.print("Enter Student Gender (Male, Female, Other): ");
                             String gender = sc.nextLine();
                             // Bind values to placeholders
@@ -115,6 +124,11 @@ public class Main {
                 // =========================
                 else if (choice == 3) {
                     System.out.print("Enter Student ID: ");
+                    if (!sc.hasNextInt()) {
+                        System.out.println("Invalid id!!");
+                        sc.nextLine();
+                        continue;
+                    }
                     int id = sc.nextInt();
                     sc.nextLine();
                     String query = "SELECT * FROM students WHERE id = ?";
@@ -217,6 +231,11 @@ public class Main {
                 // =========================
                 else if (choice == 7) {
                     System.out.print("Enter Student ID: ");
+                    if (!sc.hasNextInt()) {
+                        System.out.println("Invalid Id!!\n");
+                        sc.nextLine();
+                        continue;
+                    }
                     int id = sc.nextInt();
                     sc.nextLine();
                     System.out.print("Enter New Name: ");
@@ -227,6 +246,11 @@ public class Main {
                     double marks = sc.nextDouble();
                     sc.nextLine();
                     System.out.print("Enter New Age: ");
+                    if (!sc.hasNextInt()) {
+                        System.out.println("Invalid Age\n");
+                        sc.nextLine();
+                        continue;
+                    }
                     int age = sc.nextInt();
                     sc.nextLine();
                     System.out.print("Enter Student Gender (Male, Female, Other): ");
@@ -250,6 +274,11 @@ public class Main {
                 // =========================
                 else if (choice == 8) {
                     System.out.print("Enter Student ID: ");
+                    if (!sc.hasNextInt()) {
+                        System.out.println("Invalid Id\n");
+                        sc.nextLine();
+                        continue;
+                    }
                     int id = sc.nextInt();
                     sc.nextLine();
                     String query = "DELETE FROM students WHERE id = ?";
