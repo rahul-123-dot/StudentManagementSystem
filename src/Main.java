@@ -43,13 +43,19 @@ public class Main {
                 // =========================
                 if (choice == 1) {
                     System.out.print("How Many Student You Want To Enter: ");
-                    if (!sc.hasNextInt()) {
-                        System.out.println("Invalid!!");
+                    while (!sc.hasNextInt()) {
+                        System.out.println("Invalid! Please enter a number.");
                         sc.nextLine();
-                        continue;
+                        System.out.print("How Many Student You Want To Enter: ");
                     }
                     int n = sc.nextInt();
                     sc.nextLine();
+                    while (n < 0) {
+                        System.out.println("Invalid! Please enter a positive number.");
+                        System.out.print("How Many Student You Want To Enter: ");
+                        n = sc.nextInt();
+                        sc.nextLine();
+                    }
                     String query = "INSERT INTO students(name, course, marks, age, gender) VALUES (?, ?, ?, ?, ?)";
                     // Using try-with-resources ensures the PreparedStatement is automatically closed
                     try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -57,19 +63,55 @@ public class Main {
                             System.out.println("\n--- Entering Details for Student " + i + " ---");
                             System.out.print("Enter Student Name: ");
                             String name = sc.nextLine();
+                            while (name.trim().isEmpty()) {
+                                System.out.println("Name cannot be empty!");
+                                System.out.print("Enter Student Name: ");
+                                name = sc.nextLine();
+                            }
                             System.out.print("Enter Student Course: ");
                             String course = sc.nextLine();
+                            while (course.trim().isEmpty()) {
+                                System.out.println("Course cannot be empty!");
+                                System.out.print("Enter Student Course: ");
+                                course = sc.nextLine();
+                            }
                             System.out.print("Enter Student Marks: ");
-                            double marks = sc.nextDouble();
-                            System.out.print("Enter Student Age: ");
-                            if (!sc.hasNextInt()) {
-                                System.out.println("Invalid Age");
+                            while (!sc.hasNextDouble()) {
+                                System.out.println("Invalid marks! Please enter a number.");
                                 sc.nextLine();
+                                System.out.print("Enter Student Marks: ");
+                            }
+                            double marks = sc.nextDouble();
+                            sc.nextLine();
+                            while (marks < 0 || marks > 100) {
+                                System.out.println("Invalid marks! Marks must be between 0 and 100.");
+                                System.out.print("Enter Student Marks: ");
+                                marks = sc.nextDouble();
+                                sc.nextLine();
+                            }
+                            System.out.print("Enter Student Age: ");
+                            while (!sc.hasNextInt()) {
+                                System.out.println("Invalid age! Please enter a number.");
+                                sc.nextLine();
+                                System.out.print("Enter Student Age: ");
                             }
                             int age = sc.nextInt();
                             sc.nextLine();// consume leftover newline
+                            while (age <= 0 || age > 100) {
+                                System.out.println("Invalid age! Age must be between 1 and 100.");
+                                System.out.print("Enter Student Age: ");
+                                age = sc.nextInt();
+                                sc.nextLine();
+                            }
                             System.out.print("Enter Student Gender (Male, Female, Other): ");
                             String gender = sc.nextLine();
+                            while (!gender.equalsIgnoreCase("Male")
+                                    && !gender.equalsIgnoreCase("Female")
+                                    && !gender.equalsIgnoreCase("Other")) {
+                                System.out.println("Invalid gender!");
+                                System.out.print("Enter Student Gender (Male, Female, Other): ");
+                                gender = sc.nextLine();
+                            }
                             // Bind values to placeholders
                             preparedStatement.setString(1, name);
                             preparedStatement.setString(2, course);
@@ -124,13 +166,19 @@ public class Main {
                 // =========================
                 else if (choice == 3) {
                     System.out.print("Enter Student ID: ");
-                    if (!sc.hasNextInt()) {
-                        System.out.println("Invalid id!!");
+                    while (!sc.hasNextInt()) {
+                        System.out.println("Invalid id! Please enter a number.");
                         sc.nextLine();
-                        continue;
+                        System.out.print("Enter Student ID: ");
                     }
                     int id = sc.nextInt();
                     sc.nextLine();
+                    while (id <= 0) {
+                        System.out.println("Invalid ! please enter a valid id number");
+                        System.out.print("Enter Student Id: ");
+                        id = sc.nextInt();
+                        sc.nextLine();
+                    }
                     String query = "SELECT * FROM students WHERE id = ?";
                     PreparedStatement preparedStatement = connection.prepareStatement(query);
                     preparedStatement.setInt(1, id);
@@ -231,37 +279,67 @@ public class Main {
                 // =========================
                 else if (choice == 7) {
                     System.out.print("Enter Student ID: ");
-                    if (!sc.hasNextInt()) {
-                        System.out.println("Invalid Id!!\n");
+                    while (!sc.hasNextInt()) {
+                        System.out.println("Invalid id! Please enter a number.");
                         sc.nextLine();
-                        continue;
+                        System.out.print("Enter Student ID: ");
                     }
                     int id = sc.nextInt();
                     sc.nextLine();
+                    while (id <= 0) {
+                        System.out.println("Invalid ! please enter a valid id number");
+                        System.out.print("Enter Student Id: ");
+                        id = sc.nextInt();
+                        sc.nextLine();
+                    }
                     System.out.print("Enter New Name: ");
                     String name = sc.nextLine();
                     System.out.print("Enter New Course: ");
                     String course = sc.nextLine();
                     System.out.print("Enter New Marks: ");
+                    while (!sc.hasNextDouble()) {
+                        System.out.println("Invalid marks! Please enter a number.");
+                        sc.nextLine();
+                        System.out.print("Enter Student Marks: ");
+                    }
                     double marks = sc.nextDouble();
                     sc.nextLine();
-                    System.out.print("Enter New Age: ");
-                    if (!sc.hasNextInt()) {
-                        System.out.println("Invalid Age\n");
+                    while (marks < 0 || marks > 100) {
+                        System.out.println("Invalid marks! Marks must be between 0 and 100.");
+                        System.out.print("Enter Student Marks: ");
+                        marks = sc.nextDouble();
                         sc.nextLine();
-                        continue;
+                    }
+                    System.out.print("Enter New Age: ");
+                    while (!sc.hasNextInt()) {
+                        System.out.println("Invalid age! Please enter a number.");
+                        sc.nextLine();
+                        System.out.print("Enter Student Age: ");
                     }
                     int age = sc.nextInt();
                     sc.nextLine();
+                    while (age <= 0 || age > 100) {
+                        System.out.println("Invalid age! Age must be between 1 and 100.");
+                        System.out.print("Enter Student Age: ");
+                        age = sc.nextInt();
+                        sc.nextLine();
+                    }
                     System.out.print("Enter Student Gender (Male, Female, Other): ");
                     String gender = sc.nextLine();
+                    while (!gender.equalsIgnoreCase("Male")
+                            && !gender.equalsIgnoreCase("Female")
+                            && !gender.equalsIgnoreCase("Other")) {
+                        System.out.println("Invalid gender!");
+                        System.out.print("Enter Student Gender (Male, Female, Other): ");
+                        gender = sc.nextLine();
+                    }
                     String query = "UPDATE students SET name = ?, course = ?, marks = ?, age = ?, gender = ? WHERE id = ?";
                     PreparedStatement preparedStatement = connection.prepareStatement(query);
                     preparedStatement.setString(1, name);
                     preparedStatement.setString(2, course);
                     preparedStatement.setDouble(3, marks);
                     preparedStatement.setInt(4, age);
-                    preparedStatement.setString(5, course);
+                    preparedStatement.setString(5, gender);
                     preparedStatement.setInt(6, id);
                     int rowAffected = preparedStatement.executeUpdate();
                     if (rowAffected > 0)
@@ -274,21 +352,32 @@ public class Main {
                 // =========================
                 else if (choice == 8) {
                     System.out.print("Enter Student ID: ");
-                    if (!sc.hasNextInt()) {
-                        System.out.println("Invalid Id\n");
+                    while (!sc.hasNextInt()) {
+                        System.out.println("Invalid id! Please enter a number.");
                         sc.nextLine();
-                        continue;
+                        System.out.print("Enter Student ID: ");
                     }
                     int id = sc.nextInt();
                     sc.nextLine();
-                    String query = "DELETE FROM students WHERE id = ?";
-                    PreparedStatement preparedStatement = connection.prepareStatement(query);
-                    preparedStatement.setInt(1, id);
-                    int rowAffected = preparedStatement.executeUpdate();
-                    if (rowAffected > 0)
-                        System.out.println("\nStudent Deleted Successfully!");
-                    else System.out.println("\nStudent Not Found!");
-                    preparedStatement.close();
+                    while (id <= 0) {
+                        System.out.println("Invalid ! please enter a valid id number");
+                        System.out.print("Enter Student Id: ");
+                        id = sc.nextInt();
+                        sc.nextLine();
+                    }
+                    System.out.print("Are you sure you want to delete this student? (yes/no): ");
+                    String confirmation = sc.nextLine();
+                    if (confirmation.equalsIgnoreCase("yes")) {
+                        String query = "DELETE FROM students WHERE id = ?";
+                        PreparedStatement preparedStatement = connection.prepareStatement(query);
+                        preparedStatement.setInt(1, id);
+                        int rowAffected = preparedStatement.executeUpdate();
+                        if (rowAffected > 0)
+                            System.out.println("\nStudent Deleted Successfully!");
+                        else System.out.println("\nStudent Not Found!");
+                        preparedStatement.close();
+                    }
+                    else System.out.println("Delete cancelled.");
                 }
                 // =========================
                 // 7. EXIT
